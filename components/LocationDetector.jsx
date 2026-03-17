@@ -24,7 +24,16 @@ export default function LocationDetector() {
 
     return (
         <>
-            {isLoading && <div> Loading... </div>}
+            {isLoading && <div className='flex content-center justify-center min-h-screen w-full'>
+                <p>Loading...</p>
+                <div><Image
+                    src="/network.gif"
+                    width="500"
+                    height="500"
+                    alt='Loading...'
+                /></div>
+                
+            </div>}
         </>
     )
 }

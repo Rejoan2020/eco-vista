@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
+import Image from "next/image";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -19,11 +20,27 @@ export const metadata = {
 export default function RootLayout({ children, aqi, temperature, weather, wind }) {
     return (
         <div className="wrapper">
-            {children}
-            {aqi}
-            {temperature}
-            {weather}
-            {wind}
+            <Image
+                src="/background.png"
+                height={1200}
+                width={700}
+                alt="bg"
+                className="bg-img"
+            />
+            <div className="overlay"></div>
+            <div className="z-50! w-full">
+                <div className="container">
+                    <div
+                        className="grid grid-cols-12 gap-y-8 py-16 lg:gap-8 2xl:gap-20 2xl:py-20"
+                    >
+                        {children}
+                        {weather}
+                        {aqi}
+                        {wind}
+                        {temperature}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
