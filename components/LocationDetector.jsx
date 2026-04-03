@@ -2,7 +2,7 @@
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import React from 'react';
-import Image from 'next/image'
+import Image from 'next/image';
 
 export default function LocationDetector() {
     const pathName = usePathname();

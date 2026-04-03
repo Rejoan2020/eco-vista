@@ -1,7 +1,21 @@
 import React from 'react'
 import Image from 'next/image'
+import { getAQIData } from '@/lib/weather-info';
+import Card from '@/components/Card';
 
-export default function AqiPage() {
+export default async function AqiPage({ params, searchParams }) {
+  const { location } = await params;
+  const { latitude, longitude } = await searchParams;
+  const aqiInfo = await getAQIData(latitude, longitude);
+  // console.log(aqiInfo);
+  const aqi = aqiInfo?.main?.aqi;
+  console.log(aqi);
+  let aqiVerdict = 'Good';
+  if (aqi === 5) aqiVerdict = 'Hazardous';
+  else if (aqi === 4) aqiVerdict = 'Very Unhealthy';
+  else if (aqi === 3) aqiVerdict = 'Unhealthy';
+  else if (aqi === 2) aqiVerdict = 'Unhealthy for sensetive group'; 
+  else aqiVerdict = 'Good';
   return (
     <div className="col-span-12 lg:col-span-4 2xl:col-span-6">
       <div className="card">
@@ -23,120 +37,16 @@ export default function AqiPage() {
               />
               Air Quality Index
             </div>
-            <span className="text-right text-sm text-white lg:text-base"
-            >Good</span
-            >
-          </div>
-          {/* <!-- item --> */}
-          <div className="flex items-center justify-between gap-4">
-            <div
-              className="flex items-center gap-2 text-sm text-[#CADEE8] lg:text-base"
-            >
-              <Image
-                className="max-w-[18px]"
-                src="/icon_air_element.png"
-                width='80'
-                height='20'
-                alt="icon"
-              />
-              Carbon Monoxide
-            </div>
-            <span className="text-right text-sm text-white lg:text-base"
-            >201.94 µg/m³</span
-            >
-          </div>
-          {/* <!-- item --> */}
-          <div className="flex items-center justify-between gap-4">
-            <div
-              className="flex items-center gap-2 text-sm text-[#CADEE8] lg:text-base"
-            >
-              <Image
-                className="max-w-[18px]"
-                src="/icon_air_element.png"
-                width='80'
-                height='20'
-                alt="icon"
-              />
-              Nitric Oxide
-            </div>
-            <span className="text-right text-sm text-white lg:text-base"
-            >0.01877 ppm</span
-            >
-          </div>
-          {/* <!-- item --> */}
-          <div className="flex items-center justify-between gap-4">
-            <div
-              className="flex items-center gap-2 text-sm text-[#CADEE8] lg:text-base"
-            >
-              <Image
-                className="max-w-[18px]"
-                src="/icon_air_element.png"
-                width='80'
-                height='20'
-                alt="icon"
-              />
-              Nitrogen Dioxide
-            </div>
-            <span className="text-right text-sm text-white lg:text-base"
-            >0.7711 ppm</span
-            >
-          </div>
-
-          {/* <!-- item --> */}
-          <div className="flex items-center justify-between gap-4">
-            <div
-              className="flex items-center gap-2 text-sm text-[#CADEE8] lg:text-base"
-            >
-              <Image
-                className="max-w-[18px]"
-                src="/icon_air_element.png"
-                width='80'
-                height='20'
-                alt="icon"
-              />
-              Ozone
-            </div>
-            <span className="text-right text-sm text-white lg:text-base"
-            >68.664 µg/m³</span
-            >
-          </div>
-
-          <div className="flex items-center justify-between gap-4">
-            <div
-              className="flex items-center gap-2 text-sm text-[#CADEE8] lg:text-base"
-            >
-              <Image
-                className="max-w-[18px]"
-                src="/icon_air_element.png"
-                width='80'
-                height='20'
-                alt="icon"
-              />
-              Sulfur Dioxide
-            </div>
-            <span className="text-right text-sm text-white lg:text-base"
-            >0.6407 ppm</span>
+            <span className="text-right text-sm text-white lg:text-base">
+              {aqiVerdict}
+            </span>
 
           </div>
 
-          {/* <!-- item --> */}
-          <div className="flex items-center justify-between gap-4">
-            <div
-              className="flex items-center gap-2 text-sm text-[#CADEE8] lg:text-base"
-            >
-              <Image
-                className="max-w-[18px]"
-                src="/icon_air_element.png"
-                width='80'
-                height='20'
-                alt="icon"
-              />
-              PM2.5
-            </div>
-            <span className="text-right text-sm text-white lg:text-base"
-            >0.5 µg/m³</span>
+          {Object.entries(aqiInfo.components).map(([key, value]) => (
+            <Card key={key} name={key} value={value} />
+          ))}
 
-          </div>
         </div>
       </div>
     </div>

@@ -1,7 +1,11 @@
 import React from 'react'
 import Image from 'next/image'
+import { getLocation } from '@/lib/location-info';
+import { getWindData } from '@/lib/weather-info';
 
-export default function WindPage() {
+export default async function WindPage({searchParams}) {
+  const {latitude, longitude} = await searchParams;
+  const {speed, deg} = await getWindData(latitude,longitude);
   return (
       <div className="col-span-12 lg:col-span-4 2xl:col-span-3">
         <div className="card">
@@ -14,8 +18,8 @@ export default function WindPage() {
               height='20'
               alt="rain icon"
             />
-            <h3 className="feature-title">Rain</h3>
-            <span className="feature-name">Moderate Rain</span>
+            <h3 className="feature-title">{speed} m/s</h3>
+            <span className="feature-name">{deg} deg</span>
           </div>
         </div>
       </div>

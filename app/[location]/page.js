@@ -1,7 +1,12 @@
 import React from 'react'
 import Image from 'next/image'
+import { getLocation } from '@/lib/location-info'
+import LocationSwitcher from '@/components/LocationSwitcher';
 
-export default function LocationPage() {
+export default async function LocationPage({ searchParams }) {
+  const { latitude, longitude } = await searchParams;
+  const locationInfo = await getLocation(latitude, longitude);
+  console.log(locationInfo)
   return (
     <>
 
@@ -13,40 +18,17 @@ export default function LocationPage() {
             <h2
               className="text-3xl font-bold text-white lg:text-4xl 2xl:text-[40px]"
             >
-              North America
+              {locationInfo.continent}
             </h2>
-            <div className="relative">
-              <button>
-                <Image
-                  className="size-9"
-                  height='36'
-                  width='36'
-                  src="/link.svg"
-                  alt="link icon"
-                />
-              </button>
-              <div
-                className="absolute left-0 top-12 z-999 w-full min-w-70 rounded-md bg-white p-4 shadow max-md:-translate-x-1/2"
-              >
-                <ul
-                  role="list"
-                  className="divide-y divide-gray-100 *:py-2 [&>li]:cursor-pointer"
-                >
-                  <li>Kolkata</li>
-                  <li>Dhaka</li>
-                  <li>London</li>
-                  <li>Amsterdam</li>
-                </ul>
-              </div>
-            </div>
+            <LocationSwitcher/>
           </div>
           <p className="text-lg text-[#C4C4C4] lg:text-xl">
-            United States of America | California
+            {locationInfo.countryName} | {locationInfo.city}
           </p>
           <div
             className="flex items-center gap-2 text-xs text-[#92B6F5] lg:text-sm"
           >
-            <span>2:24 PM</span> <span>Monday, 12 February 2024</span>
+            <span>{new Date().toLocaleTimeString()}</span> <span>{new Date().toLocaleDateString()}</span>
           </div>
         </div>
       </div>

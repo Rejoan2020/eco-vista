@@ -1,6 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
-export default function TemperaturePage() {
+import { getMainData } from '@/lib/weather-info'
+export default async function TemperaturePage({params, searchParams}) {
+  const { latitude, longitude } = await searchParams;
+  const {temp, feels_like} = await getMainData(latitude,longitude);
   return (
     <div className="col-span-12 lg:col-span-4 2xl:col-span-3">
         <div className="card">
@@ -13,9 +16,9 @@ export default function TemperaturePage() {
               height='20'
               alt="rain icon"
             />
-            <h3 className="feature-title">246.43°C</h3>
+            <h3 className="feature-title">{temp}°C</h3>
 
-            <span className="feature-name">Feels Like 244°C</span>
+            <span className="feature-name">{feels_like}°C</span>
           </div>
         </div>
       </div>

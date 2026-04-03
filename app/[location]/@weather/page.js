@@ -1,7 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
-
-export default function WeatherPage() {
+import { getWeatherData } from '@/lib/weather-info'
+export default async function WeatherPage({ params, searchParams }) {
+  const { latitude, longitude } = await searchParams;
+  const { main, description } = await getWeatherData(latitude, longitude);
   return (
     <div className="col-span-12 lg:col-span-4 2xl:col-span-3">
       <div className="card">
@@ -14,8 +16,8 @@ export default function WeatherPage() {
             width='80'
             height='20'
           />
-          <h3 className="feature-title">Rain</h3>
-          <span className="feature-name">Moderate Rain</span>
+          <h3 className="feature-title">{main}</h3>
+          <span className="feature-name">{description}</span>
         </div>
         <div>
         </div>
