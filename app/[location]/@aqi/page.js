@@ -1,21 +1,28 @@
 import React from 'react'
 import Image from 'next/image'
 import { getAQIData } from '@/lib/weather-info';
+import { getLonLat } from '@/lib/location-info';
 import Card from '@/components/Card';
 
 export default async function AqiPage({ params, searchParams }) {
-  const { location } = await params;
-  const { latitude, longitude } = await searchParams;
+  let { latitude, longitude } = await searchParams;
+  const {location} = await params;
+  if (!latitude || !longitude) {
+    const result = await getLonLat(location);
+
+    latitude = result.latitude;
+    longitude = result.longitude;
+  }
   const aqiInfo = await getAQIData(latitude, longitude);
-  // console.log(aqiInfo);
   const aqi = aqiInfo?.main?.aqi;
-  console.log(aqi);
+
   let aqiVerdict = 'Good';
   if (aqi === 5) aqiVerdict = 'Hazardous';
   else if (aqi === 4) aqiVerdict = 'Very Unhealthy';
   else if (aqi === 3) aqiVerdict = 'Unhealthy';
-  else if (aqi === 2) aqiVerdict = 'Unhealthy for sensetive group'; 
+  else if (aqi === 2) aqiVerdict = 'Unhealthy for sensetive group';
   else aqiVerdict = 'Good';
+
   return (
     <div className="col-span-12 lg:col-span-4 2xl:col-span-6">
       <div className="card">
@@ -29,7 +36,7 @@ export default async function AqiPage({ params, searchParams }) {
               className="flex items-center gap-2 text-sm text-[#CADEE8] lg:text-base"
             >
               <Image
-                className="max-w-[18px]"
+                className="max-w-4.5"
                 src="/icon_air_element.png"
                 width='80'
                 height='20'

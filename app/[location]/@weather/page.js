@@ -1,8 +1,17 @@
 import React from 'react'
 import Image from 'next/image'
 import { getWeatherData } from '@/lib/weather-info'
+import { getLonLat } from '@/lib/location-info';
+
 export default async function WeatherPage({ params, searchParams }) {
-  const { latitude, longitude } = await searchParams;
+  let { latitude, longitude } = await searchParams;
+  const {location} = await params;
+  if (!latitude || !longitude) {
+      const result = await getLonLat(location);
+  
+      latitude = result.latitude;
+      longitude = result.longitude;
+    }
   const { main, description } = await getWeatherData(latitude, longitude);
   return (
     <div className="col-span-12 lg:col-span-4 2xl:col-span-3">
